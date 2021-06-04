@@ -6,6 +6,9 @@ module.exports = {
   plugins: ["vue"],
   rules: {
     "vue/valid-v-if": "error",
-    "no-console": ["warn", { allow: ["warn", "error"] }]
+    "no-console": "off",
+    "no-debugger": "off",
+    "vue/html-end-tags": "error",
+    "vue/no-unused-vars": "warn",
   }
 };

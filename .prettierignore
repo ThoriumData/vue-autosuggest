@@ -1,1 +1,22 @@
 *.vue
+
+# os x
+.DS_Store
+
+# Ignore artifacts:
+build/
+coverage/
+dist/
+
+# testing
+/tests/e2e/videos/
+/tests/e2e/screenshots/
+
+# Editor directories and files
+*.code-workspace
+.idea
+.vscode
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

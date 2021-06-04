@@ -1,6 +1,11 @@
 // .prettierrc.js
 module.exports = {
-  printWidth: 100,
+  printWidth: 200,
   singleQuote: false,
   semi: true
+  tabWidth: 4,
+  useTabs: false,
+  trailingComma: "es5",
+  vueIndentScriptAndStyle: true
+  proseWrap: "preserve",
 };
