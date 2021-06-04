@@ -1,0 +1,12 @@
+{
+    "files.exclude": {
+        ".vscode": true,
+        "**/*code-workspace": true
+    },
+    "search.exclude": {
+        ".all-contributorsrc": true,
+        "**/*error.log": true,
+        "**/*lock": true,
+        "**/docs": true
+    }
+}
