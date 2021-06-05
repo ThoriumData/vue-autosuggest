@@ -10,5 +10,7 @@ module.exports = {
     "no-debugger": "off",
     "vue/html-end-tags": "error",
     "vue/no-unused-vars": "warn",
+    "indent": "off",
+    "vue/html-indent": "off",
   }
 };
