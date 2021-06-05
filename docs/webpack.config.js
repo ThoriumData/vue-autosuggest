@@ -1,6 +1,8 @@
 const path = require("path");
 const eslintFriendlyFormatter = require("eslint-friendly-formatter");
 
+const { VueLoaderPlugin } = require('vue-loader');
+
 module.exports = {
     context: __dirname,
     mode: process.env.NODE_ENV || 'development',
@@ -28,7 +30,28 @@ module.exports = {
                 test: /\.vue$/,
                 loaders: ["vue-loader"],
                 exclude: /node_modules/
-            }
+            },
+
+            // this will apply to both plain `.css` files
+            // AND `<style>` blocks in `.vue` files
+            {
+                test: /\.css$/,
+                use: [
+                'vue-style-loader',
+                'css-loader'
+                ]
+            },
+
+            // this will apply to both plain `.scss` files
+            // AND `<style lang="scss">` blocks in `.vue` files
+            {
+                test: /\.scss$/,
+                use: [
+                'vue-style-loader',
+                'css-loader',
+                'sass-loader'
+                ]
+            },
         ]
     },
 
@@ -46,6 +69,10 @@ module.exports = {
         filename: "app.js",
         publicPath: "/build/"
     },
+
+    plugins: [
+        new VueLoaderPlugin()
+    ],
 
     devServer: {
         contentBase: __dirname,
