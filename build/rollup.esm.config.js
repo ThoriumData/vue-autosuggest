@@ -1,8 +1,12 @@
 import vue from "rollup-plugin-vue";
-import buble from "rollup-plugin-buble";
+
+import buble from '@rollup/plugin-buble';
+
 import filesize from "rollup-plugin-filesize";
-import uglify from "rollup-plugin-uglify";
-import json from "rollup-plugin-json";
+import {uglify} from "rollup-plugin-uglify";
+
+import json from '@rollup/plugin-json';
+import replace from '@rollup/plugin-replace';
 
 export default {
   input: "src/vue-autosuggest.js",
@@ -13,8 +17,13 @@ export default {
       objectAssign: "Object.assign",
       jsx: "h"
     }),
+    replace({
+      "process.env": JSON.stringify({
+        NODE_ENV: "production"
+      })
+    }),
+    uglify(),
     filesize(),
-    uglify()
   ],
   output: [
     {
