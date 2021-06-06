@@ -1,10 +1,7 @@
 import vue from "rollup-plugin-vue";
-
 import buble from '@rollup/plugin-buble';
-
 import filesize from "rollup-plugin-filesize";
-import {uglify} from "rollup-plugin-uglify";
-
+import { terser } from "rollup-plugin-terser";
 import json from '@rollup/plugin-json';
 import replace from '@rollup/plugin-replace';
 
@@ -22,7 +19,7 @@ export default {
         NODE_ENV: "production"
       })
     }),
-    uglify(),
+    terser(),
     filesize(),
   ],
   output: [
