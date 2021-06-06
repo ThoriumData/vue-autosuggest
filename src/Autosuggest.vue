@@ -408,9 +408,9 @@ export default {
      * @param {InputEvent} e
      */
     inputHandler(e) {
-        const newValue = e.target.value
-        this.$emit('input', newValue)
-        this.internalValue = newValue
+        const newValue = e.target.value;
+        this.$emit('input', newValue);
+        this.internalValue = newValue;
         if (!this.didSelectFromOptions) {
                 this.searchInputOriginal = newValue;
                 this.currentIndex = null;
@@ -431,24 +431,24 @@ export default {
         let obj = false;
         if (index === null) return obj;
         for (var i = 0; i < this.computedSections.length; i++) {
-        if (
-            index >= this.computedSections[i].start_index &&
-            index <= this.computedSections[i].end_index
-        ) {
-            let trueIndex = index - this.computedSections[i].start_index;
-            const sectionName = this.computedSections[i].name
-            let childSection = this.$refs[this.getSectionRef(`${sectionName}${i}`)][0];
-            if (childSection) {
-            obj = this.normalizeItem(
-                this.computedSections[i].name,
-                this.computedSections[i].type,
-                childSection.section.label,
-                childSection.section.liClass,
-                childSection.getItemByIndex(trueIndex)
-            );
-            break;
+            if (
+                index >= this.computedSections[i].start_index &&
+                index <= this.computedSections[i].end_index
+            ) {
+                let trueIndex = index - this.computedSections[i].start_index;
+                const sectionName = this.computedSections[i].name;
+                let childSection = this.$refs[this.getSectionRef(`${sectionName}${i}`)][0];
+                if (childSection) {
+                    obj = this.normalizeItem(
+                        this.computedSections[i].name,
+                        this.computedSections[i].type,
+                        childSection.section.label,
+                        childSection.section.liClass,
+                        childSection.getItemByIndex(trueIndex)
+                    );
+                    break;
+                }
             }
-        }
       }
 
       return obj;
@@ -484,8 +484,9 @@ export default {
           case 40: // ArrowDown
           case 38: // ArrowUp
                 e.preventDefault();
+
                 if (keyCode === 38 && this.currentIndex === null) {
-                break;
+                    break;
                 }
                 // Determine direction of arrow up/down and determine new currentIndex
                 const direction = keyCode === 40 ? 1 : -1;
@@ -494,24 +495,24 @@ export default {
                 this.setCurrentIndex(newIndex, this.totalResults);
                 this.didSelectFromOptions = true;
                 if (this.totalResults > 0 && this.currentIndex >= 0) {
-                this.setChangeItem(this.getItemByIndex(this.currentIndex));
-                this.didSelectFromOptions = true;
+                    this.setChangeItem(this.getItemByIndex(this.currentIndex));
+                    this.didSelectFromOptions = true;
                 } else if (this.currentIndex === INDEX_IS_FOCUSED_ON_INPUT) {
-                this.setChangeItem(null)
-                this.internalValue = this.searchInputOriginal;
-                e.preventDefault();
+                    this.setChangeItem(null)
+                    this.internalValue = this.searchInputOriginal;
+                    e.preventDefault();
                 }
 
                 this.$nextTick(() => {
-                this.ensureItemVisible(this.currentItem, this.currentIndex);
-                })
+                    this.ensureItemVisible(this.currentItem, this.currentIndex);
+                });
                 break;
           case 13: // Enter
                 e.preventDefault();
 
                 if (this.totalResults > 0 && this.currentIndex >= 0) {
-                this.setChangeItem(this.getItemByIndex(this.currentIndex), true);
-                this.didSelectFromOptions = true;
+                    this.setChangeItem(this.getItemByIndex(this.currentIndex), true);
+                    this.didSelectFromOptions = true;
                 }
 
                 this.loading = true;
@@ -547,11 +548,11 @@ export default {
         this.$emit('item-changed', null, null)
       } else if (item) {
         this.currentItem = item;
-        this.$emit('item-changed', item, this.currentIndex)
-        const v = this.getSuggestionValue(item)
+        this.$emit('item-changed', item, this.currentIndex);
+        const v = this.getSuggestionValue(item);
         this.internalValue = v;
         if (overrideOriginalInput) {
-          this.searchInputOriginal = v;
+            this.searchInputOriginal = v;
         }
         this.ensureItemVisible(item, this.currentIndex);
       }
@@ -563,11 +564,11 @@ export default {
      */
     normalizeItem(name, type, label, className, item) {
         return {
-                name,
-                type,
-                label,
-                liClass: item.liClass || className,
-                item
+            name,
+            type,
+            label,
+            liClass: item.liClass || className,
+            item
         };
     },
 
@@ -579,33 +580,33 @@ export default {
      */
     ensureItemVisible(item, index, selector) {
 
-      const resultsScrollElement = this.$el.querySelector(
+        const resultsScrollElement = this.$el.querySelector(
             selector || `.${this._componentAttrClassAutosuggestResults}`
-      );
+        );
 
-      if (!resultsScrollElement) {
+        if (!resultsScrollElement) {
             return;
-      }
+        }
 
-      const itemElement = resultsScrollElement.querySelector(`#${this.componentAttrPrefix}__results-item--${index}`);
+        const itemElement = resultsScrollElement.querySelector(`#${this.componentAttrPrefix}__results-item--${index}`);
 
-      if (!itemElement) {
+        if (!itemElement) {
             return;
-      }
+        }
 
-      const resultsScrollWindowHeight = resultsScrollElement.clientHeight;
-      const resultsScrollScrollTop = resultsScrollElement.scrollTop;
+        const resultsScrollWindowHeight = resultsScrollElement.clientHeight;
+        const resultsScrollScrollTop = resultsScrollElement.scrollTop;
 
-      const itemHeight = itemElement.clientHeight;
-      const currentItemScrollOffset = itemElement.offsetTop;
+        const itemHeight = itemElement.clientHeight;
+        const currentItemScrollOffset = itemElement.offsetTop;
 
-      if ( itemHeight + currentItemScrollOffset >= resultsScrollScrollTop + resultsScrollWindowHeight) {
+        if ( itemHeight + currentItemScrollOffset >= resultsScrollScrollTop + resultsScrollWindowHeight) {
             /** Current item goes below visible scroll window */
             resultsScrollElement.scrollTop = itemHeight + currentItemScrollOffset - resultsScrollWindowHeight;
-      } else if (currentItemScrollOffset < resultsScrollScrollTop && resultsScrollScrollTop > 0) {
+        } else if (currentItemScrollOffset < resultsScrollScrollTop && resultsScrollScrollTop > 0) {
             /** Current item goes above visible scroll window */
             resultsScrollElement.scrollTop = currentItemScrollOffset;
-      }
+        }
     },
     /**
      * @param {Number} index
@@ -621,7 +622,6 @@ export default {
      */
     clickedOnScrollbar(e, mouseX){
         const results = this.$el.querySelector(`.${this._componentAttrClassAutosuggestResults}`);
-
         const mouseIsInsideScrollbar = results && results.clientWidth <= (mouseX + 17) && mouseX + 17 <= results.clientWidth + 34;
         return e.target.tagName === 'DIV' && results && mouseIsInsideScrollbar || false;
     },
@@ -649,8 +649,7 @@ export default {
             return;
         }
 
-        if (e.target.tagName === 'INPUT' ||
-            (this.clickedOnScrollbar(e, this.clientXMouseDownInitial))) {
+        if (e.target.tagName === 'INPUT' || (this.clickedOnScrollbar(e, this.clientXMouseDownInitial))) {
             return;
         }
 
@@ -676,11 +675,11 @@ export default {
          * we need to make sure that we adjust for the limits.
          */
         if (!onHover) {
-                const hitLowerLimt = this.currentIndex === null;
-                const hitUpperLimit = newIndex >= limit;
-                if (hitLowerLimt || hitUpperLimit) {
-                    adjustedValue = 0;
-                }
+            const hitLowerLimt = this.currentIndex === null;
+            const hitUpperLimit = newIndex >= limit;
+            if (hitLowerLimt || hitUpperLimit) {
+                adjustedValue = 0;
+            }
         }
 
         this.currentIndex = adjustedValue;
@@ -688,10 +687,10 @@ export default {
         const hoverClass = `${this.componentAttrPrefix}__results-item--highlighted`;
 
         if (this.$el.querySelector(`.${hoverClass}`)) {
-                removeClass(this.$el.querySelector(`.${hoverClass}`), hoverClass);
+            removeClass(this.$el.querySelector(`.${hoverClass}`), hoverClass);
         }
         if (element) {
-                addClass(element, hoverClass);
+            addClass(element, hoverClass);
         }
     }
   },
