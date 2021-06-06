@@ -1,52 +1,52 @@
 const DefaultSection = {
-  name: "default-section",
-  props: {
+    name: "default-section",
+    props: {
         /** @type ResultSection */
         section: {
             type: Object,
-            required: true
+            required: true,
         },
         currentIndex: {
             type: [Number, String],
             required: false,
-            default: Infinity
+            default: Infinity,
         },
         renderSuggestion: {
             type: Function,
-            required: false
+            required: false,
         },
         normalizeItemFunction: {
             type: Function,
-            required: true
+            required: true,
         },
         componentAttrPrefix: {
             type: String,
-            required: true
+            required: true,
         },
         componentAttrIdAutosuggest: {
             type: String,
-            required: true
+            required: true,
         }
-  },
-  data: function () {
+    },
+    data: function () {
         return {
             /** @type Number */
-            _currentIndex: this.currentIndex
-        }
-  },
-  computed: {
-    /**
-     * Suggestions from the section
-     */
-    list: function () {
-        let { limit, data } = this.section;
-        if (data.length < limit) {
-            limit = data.length;
-        }
-        return data.slice(0, limit);
-    }
-  },
-  methods: {
+            _currentIndex: this.currentIndex,
+        };
+    },
+    computed: {
+        /**
+         * Suggestions from the section
+         */
+        list: function () {
+            let {limit, data} = this.section;
+            if (data.length < limit) {
+                limit = data.length;
+            }
+            return data.slice(0, limit);
+        },
+    },
+    methods: {
         getItemIndex (i) {
             return this.section.start_index + i;
         },
@@ -54,16 +54,16 @@ const DefaultSection = {
             return this.section.data[i];
         },
         onMouseEnter (event) {
-            const idx = parseInt(event.currentTarget.getAttribute("data-suggestion-index"))
-            this._currentIndex = idx
-            this.$emit('updateCurrentIndex', idx)
+            const idx = parseInt(event.currentTarget.getAttribute("data-suggestion-index"));
+            this._currentIndex = idx;
+            this.$emit("updateCurrentIndex", idx);
         },
         onMouseLeave () {
-            this.$emit('updateCurrentIndex', null)
-        }
-  },
-  // eslint-disable-next-line no-unused-vars
-  render (h) {
+            this.$emit("updateCurrentIndex", null);
+        },
+    },
+    // eslint-disable-next-line no-unused-vars
+    render (h) {
         const componentAttrPrefix = this.componentAttrPrefix;
         const slots = {
             beforeSection: this.$scopedSlots[`before-section-${this.section.name}`],
@@ -77,59 +77,81 @@ const DefaultSection = {
             className: beforeClassName
         }) || [];
 
+        // console.log("this.section.sectionClass", this.section.sectionClass);
+        // a section in results
         return h(
-        "ul",
-        {
-            attrs: { role: "listbox", "aria-labelledby": this.section.label && `${this.componentAttrIdAutosuggest}-${this.section.label}` },
-            class: this.section.ulClass
-        },
-        [
-            before[0] && before[0] || this.section.label && <li class={beforeClassName} id={`${this.componentAttrIdAutosuggest}-${this.section.label}`}>{this.section.label}</li> || '',
-            this.list.map((val, key) => {
-            const item = this.normalizeItemFunction(this.section.name, this.section.type, this.section.label, this.section.liClass, val);
-            const itemIndex = this.getItemIndex(key);
-            const isHighlighted = this._currentIndex === itemIndex || parseInt(this.currentIndex) === itemIndex;
+            "div",
 
-            return h(
-                "li",
-                {
-                    attrs: {
-                        role: "option",
-                        "data-suggestion-index": itemIndex,
-                        "data-section-name": item.name,
-                        id: `${componentAttrPrefix}__results-item--${itemIndex}`,
-                        ...item.liAttributes
-                    },
-                    key: itemIndex,
-                    class: {
-                        [`${componentAttrPrefix}__results-item--highlighted`]: isHighlighted,
-                        [`${componentAttrPrefix}__results-item`]: true,
-                        ...item.liClass
-                    },
-                    on: {
-                        mouseenter: this.onMouseEnter,
-                        mouseleave: this.onMouseLeave
-                    }
+            // {
+            //     attrs: { role: "listbox", "aria-labelledby": this.section.label && `${this.componentAttrIdAutosuggest}-${this.section.label}` },
+            //     class: this.section.ulClass
+            // },
+            {
+                attrs: {
+                    role: "listbox",
+                    "aria-labelledby": this.section.label && `${this.componentAttrIdAutosuggest}-${this.section.label}`
                 },
-                [
-                    this.renderSuggestion ? this.renderSuggestion(item) : this.$scopedSlots.default && this.$scopedSlots.default ({
-                        _key: key,
-                        suggestion: item
-                    })
-                ]
-            );
-            }),
+                class: {
+                    "autosuggest-section": true,
+                    // [`${this.section.sectionClass}`]: this.section.sectionClass ? true : null
+                    ...this.section.sectionClass
+                }
+            },
 
-            slots.afterSectionDefault && slots.afterSectionDefault({
-                section: this.section,
-                className: `${componentAttrPrefix}__results-after ${componentAttrPrefix}__results-after--${this.section.name}`
-            }),
+            [
+                before[0] && before[0] || this.section.label && <div class={beforeClassName} id={`${this.componentAttrIdAutosuggest}-${this.section.label}`}>{this.section.label}</div> || '',
+                this.list.map((val, key) => {
+                // const item = this.normalizeItemFunction(this.section.name, this.section.type, this.section.label, this.section.liClass, val);
+                const item = this.normalizeItemFunction(this.section.name, this.section.type, this.section.label, this.section.itemClass, val);
+                const itemIndex = this.getItemIndex(key);
+                const isHighlighted = this._currentIndex === itemIndex || parseInt(this.currentIndex) === itemIndex;
 
-            slots.afterSectionNamed && slots.afterSectionNamed({
-                section: this.section,
-                className: `${componentAttrPrefix}__results_after ${componentAttrPrefix}__results-after--${this.section.name}`
-            })
-        ]
+                // collection of items in a results section
+                return h(
+                    "div",
+                    {
+                        attrs: {
+                            role: "option",
+                            "data-suggestion-index": itemIndex,
+                            "data-section-name": item.name,
+                            id: `${componentAttrPrefix}__results-item--${itemIndex}`,
+                            // ...item.liAttributes
+                        },
+                        key: itemIndex,
+                        // class: {
+                        //     [`${componentAttrPrefix}__results-item--highlighted`]: isHighlighted,
+                        //     [`${componentAttrPrefix}__results-item`]: true,
+                        //     ...item.liClass
+                        // },
+                        class: {
+                            [`${componentAttrPrefix}__results-item--highlighted`]: isHighlighted,
+                            [`${componentAttrPrefix}__results-item`]: true,
+                            ...item.itemClass
+                        },
+                        on: {
+                            mouseenter: this.onMouseEnter,
+                            mouseleave: this.onMouseLeave
+                        },
+                    },
+                    [
+                        this.renderSuggestion ? this.renderSuggestion(item) : this.$scopedSlots.default && this.$scopedSlots.default ({
+                            _key: key,
+                            suggestion: item,
+                        }),
+                    ]
+                );
+                }),
+
+                slots.afterSectionDefault && slots.afterSectionDefault({
+                    section: this.section,
+                    className: `${componentAttrPrefix}__results-after ${componentAttrPrefix}__results-after--${this.section.name}`
+                }),
+
+                slots.afterSectionNamed && slots.afterSectionNamed({
+                    section: this.section,
+                    className: `${componentAttrPrefix}__results_after ${componentAttrPrefix}__results-after--${this.section.name}`
+                }),
+            ]
         );
     }
 };
