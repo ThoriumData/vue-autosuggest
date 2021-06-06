@@ -1,9 +1,12 @@
 const path = require("path");
-const eslintFriendlyFormatter = require("eslint-friendly-formatter");
+
+// const eslintFriendlyFormatter = require("eslint-friendly-formatter");
+const ESLintPlugin = require('eslint-webpack-plugin');
 
 const { VueLoaderPlugin } = require('vue-loader');
 
 module.exports = {
+
     context: __dirname,
     mode: process.env.NODE_ENV || 'development',
     module: {
@@ -12,23 +15,25 @@ module.exports = {
                 test: /\.js$/,
                 exclude: /node_modules/,
                 test: /\.(js|vue)$/,
-                loader: "eslint-loader",
-                enforce: "pre",
-                options: {
-                    formatter: eslintFriendlyFormatter
-                }
+                // loader: "eslint-loader",
+                // enforce: "pre",
+                // options: {
+                    // formatter: eslintFriendlyFormatter
+                // }
             },
+
             {
                 test: /\.js/,
                 loader: "babel-loader",
                 exclude: /node_modules/,
                 options: {
-                  babelrc: true
+                    babelrc: true
                 }
             },
+
             {
                 test: /\.vue$/,
-                loaders: ["vue-loader"],
+                loader: "vue-loader",
                 exclude: /node_modules/
             },
 
@@ -37,21 +42,47 @@ module.exports = {
             {
                 test: /\.css$/,
                 use: [
-                'vue-style-loader',
-                'css-loader'
+                    'vue-style-loader',
+                    'css-loader'
                 ]
             },
+            // {
+            //     test: /\.css$/,
+            //     use: [
+            //         {
+            //             loader: 'vue-style-loader'
+            //         },
+            //         {
+            //             loader: 'css-loader',
+            //         }
+            //     ]
+            // },
+
 
             // this will apply to both plain `.scss` files
             // AND `<style lang="scss">` blocks in `.vue` files
             {
-                test: /\.scss$/,
+                test: /\.s[ac]ss$/i,
                 use: [
-                'vue-style-loader',
-                'css-loader',
-                'sass-loader'
+                    'vue-style-loader',
+                    // 'css-loader',
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            sourceMap: true
+                        }
+                    },
+                    // 'sass-loader'
+                    {
+                        loader: 'sass-loader',
+                        options: {
+                            sourceMap: true
+                        }
+                    },
                 ]
             },
+
+
         ]
     },
 
@@ -71,7 +102,8 @@ module.exports = {
     },
 
     plugins: [
-        new VueLoaderPlugin()
+        new VueLoaderPlugin(),
+        new ESLintPlugin()
     ],
 
     devServer: {
