@@ -99,11 +99,17 @@ export default {
         ),
 
         sectionConfigs: {
+        // default: {
+        //     limit: 4,
+        //     ulClass: null,
+        //     liClass: {'elf-row': true }
+        // },
         default: {
             limit: 4,
-            ulClass: {'data-darren': true },
-            liClass: {'elf-row': true }
+            sectionClass: null,
+            itemClass: {'elf-row': true }
         },
+
         Elf: {
             limit: 6
         }
@@ -145,16 +151,18 @@ export default {
             }
             races.forEach(r => {
                 const people = this.options.filter(o => o.name === r)[0].data.filter(p => {
-                return p.Name.toLowerCase().indexOf(this.searchText.toLowerCase()) > -1;
+                    return p.Name.toLowerCase().indexOf(this.searchText.toLowerCase()) > -1;
                 }).map(p => {
-                p.liClass = p.Name === 'Gandalf' ? {'gandalf': true} : null
-                return p
+                    // p.liClass = p.Name === 'Gandalf' ? {'gandalf': true} : null
+                    p.itemClass = p.Name === 'Gandalf' ? {'gandalf': true} : null
+                    return p
                 });
 
                 people.length > 0 &&
                 filtered.push({
                     name: Object.keys(this.sectionConfigs).indexOf(r) > -1 ? r : 'default',
                     label: r,
+                    // label: "Suggestions",
                     data: people
                 });
             })
