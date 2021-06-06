@@ -6,58 +6,61 @@
         <h1>Vue-autosuggest</h1>
 
         <div>
-        <vue-autosuggest
-            v-model="searchText"
-            componentAttrIdAutosuggest="demo-autosuggest"
-            @input="(...args) => logEvent('input', args)"
-            @highlighted="(...args) => logEvent('highlighted', args)"
-            @selected="onSelected"
-            :suggestions="filteredOptions"
-            :input-props="inputProps"
-            :section-configs="sectionConfigs"
-            :getSuggestionValue="getSuggestionValue"
-            :should-render-suggestions="(size, loading) => size >= 0 && !loading && searchText !== ''"
-            ref="autocomplete"
-        >
-            <template slot="before-input">
-            <label :for="inputProps.id">Select a LOTR Character</label>
-            </template>
-            <template slot-scope="{suggestion, index, cs}">
-            <div>{{ suggestion && suggestion.item.Name }}</div>
-            </template>
-            <template slot="after-suggestions">
-            <p v-if="filteredOptions == 0" style="text-align: center;">No Results... Try <a style="color: peachpuff;" :href="`https://www.google.com/search?safe=active&source=hp&ei=t_M-Xci6EYq6tgXrzbLoCw&q=${searchText}`" @mouseup.stop target="_blank">googling</a></p>
-            </template>
-        </vue-autosuggest>
+            <vue-autosuggest
+                v-model="searchText"
+                componentAttrIdAutosuggest="demo-autosuggest"
+                @input="(...args) => logEvent('input', args)"
+                @highlighted="(...args) => logEvent('highlighted', args)"
+                @selected="onSelected"
+                :suggestions="filteredOptions"
+                :input-props="inputProps"
+                :section-configs="sectionConfigs"
+                :getSuggestionValue="getSuggestionValue"
+                :should-render-suggestions="(size, loading) => size >= 0 && !loading && searchText !== ''"
+                ref="autocomplete"
+            >
+                <template slot="before-input">
+                <label :for="inputProps.id">Select a LOTR Character</label>
+                </template>
+                <template slot-scope="{suggestion, index, cs}">
+                <div>{{ suggestion && suggestion.item.Name }}</div>
+                </template>
+                <template slot="after-suggestions">
+                <p v-if="filteredOptions == 0" style="text-align: center;">No Results... Try <a style="color: peachpuff;" :href="`https://www.google.com/search?safe=active&source=hp&ei=t_M-Xci6EYq6tgXrzbLoCw&q=${searchText}`" @mouseup.stop target="_blank">googling</a></p>
+                </template>
+            </vue-autosuggest>
         </div>
+
         <div style="padding-top:10px; margin-bottom: 10px;">
-        <span
-            v-if="selected.Race === 'Human' && selected.Name === 'Aragorn I'"
-        >"Not idly do the leaves of Lórien fall," proclaimed Aragorn.</span>
-        <span v-else-if="selected.Race === 'Human'">
-            You have choosen poorly. Humans
-            are like... the worst.
-        </span>
-        <span
-            v-else-if="selected.Race === 'Elf' && selected.Name === 'Legolas'"
-        >Legolas is like... so hawt.</span>
-        <span v-else-if="selected.Race === 'Elf' && selected.Name === 'Galadriel'">
-            "Things that were... things that are... and some things... that have not
-            yet come to pass." Wait... is that in the book?!
-        </span>
-        <span v-else-if="selected.Race === 'Dwarf' && selected.Name === 'Gimli'">And with my axe!</span>
-        <span v-else-if="selected.Race === 'Dwarf'">What is the plural of Dwarf anyways?</span>
-        <span v-else-if="selected.Race === 'Maiar' && selected.Name === 'Gandalf'">
-            The counsel of Gandalf was not founded on foreknowledge of safety, for
-            himself or for others," said Aragorn. "There are some things that it is
-            better to begin than to refuse, even though the end may be dark."
-        </span>
-        <span v-else-if="selected.Race === 'Hobbit'">Sneaky little Hobbitses. Wicked. Tricksy.</span>
+            <span
+                v-if="selected.Race === 'Human' && selected.Name === 'Aragorn I'"
+                >"Not idly do the leaves of Lórien fall," proclaimed Aragorn.
+            </span>
+            <span v-else-if="selected.Race === 'Human'">
+                You have choosen poorly. Humans
+                are like... the worst.
+            </span>
+            <span
+                v-else-if="selected.Race === 'Elf' && selected.Name === 'Legolas'"
+            >Legolas is like... so hawt.</span>
+            <span v-else-if="selected.Race === 'Elf' && selected.Name === 'Galadriel'">
+                "Things that were... things that are... and some things... that have not
+                yet come to pass." Wait... is that in the book?!
+            </span>
+            <span v-else-if="selected.Race === 'Dwarf' && selected.Name === 'Gimli'">And with my axe!</span>
+            <span v-else-if="selected.Race === 'Dwarf'">What is the plural of Dwarf anyways?</span>
+            <span v-else-if="selected.Race === 'Maiar' && selected.Name === 'Gandalf'">
+                The counsel of Gandalf was not founded on foreknowledge of safety, for
+                himself or for others," said Aragorn. "There are some things that it is
+                better to begin than to refuse, even though the end may be dark."
+            </span>
+            <span v-else-if="selected.Race === 'Hobbit'">Sneaky little Hobbitses. Wicked. Tricksy.</span>
         </div>
+
         <div class="event-log">
-        <div v-for="evt in events">
-            <span class="evt-name">{{ evt.name }}</span>: <span class="evt-val">{{ evt.value }}</span>
-        </div>
+            <div v-for="evt in events">
+                <span class="evt-name">{{ evt.name }}</span>: <span class="evt-val">{{ evt.value }}</span>
+            </div>
         </div>
     </main>
 </template>
@@ -78,64 +81,60 @@ export default {
     components: {
         VueAutosuggest
     },
-    mounted(){
-        const storageTheme = localStorage.getItem('autosuggest-theme');
-        const theme = storageTheme || (window.matchMedia("(prefers-color-scheme: dark)").matches ? 'dark' : 'light');
-        console.log({theme});
-        this.toggleTheme(theme);
-    },
+
+
     data() {
-    return {
-        selected: "",
-        searchText: "",
+        return {
+            selected: "",
+            searchText: "",
 
-        theme: null,
+            theme: null,
 
-        options: races.map(r => ({
-            label: r,
-            name: r,
-            data: characters.filter(c => c.Race === r)
-            })
-        ),
+            options: races.map(r => ({
+                label: r,
+                name: r,
+                data: characters.filter(c => c.Race === r)
+                })
+            ),
 
-        sectionConfigs: {
-        // default: {
-        //     limit: 4,
-        //     ulClass: null,
-        //     liClass: {'elf-row': true }
-        // },
-        default: {
-            limit: 4,
-            sectionClass: null,
-            itemClass: {'elf-row': true }
-        },
+            sectionConfigs: {
+            // default: {
+            //     limit: 4,
+            //     ulClass: null,
+            //     liClass: {'elf-row': true }
+            // },
+                default: {
+                    limit: 4,
+                    sectionClass: null,
+                    itemClass: {'elf-row': true }
+                },
 
-        Elf: {
-            limit: 6
-        }
-        },
-        inputProps: {
-            id: "autosuggest__input",
-            placeholder: "Search"
-        },
-        themes: {
-        dark: {
-            bg: '#21222C',
-            color: 'white',
-            header: '#8F73BD',
-            item_color_highlighted: '#80D4E7',
-            item_bg_highlighted: '#363948',
-        },
-        light: {
-            bg: 'white',
-            header: '#8F73BD',
-            color: 'black',
-            item_color_highlighted: 'black',
-            item_bg_highlighted: '#e0e0e0',
-        }
-        },
-        events: []
-    };
+                Elf: {
+                    limit: 6
+                }
+            },
+            inputProps: {
+                id: "autosuggest__input",
+                placeholder: "Search..."
+            },
+            themes: {
+                dark: {
+                    bg: '#21222C',
+                    color: 'white',
+                    header: '#8F73BD',
+                    item_color_highlighted: '#80D4E7',
+                    item_bg_highlighted: '#363948',
+                },
+                light: {
+                    bg: 'white',
+                    header: '#8F73BD',
+                    color: 'black',
+                    item_color_highlighted: 'black',
+                    item_bg_highlighted: '#e0e0e0',
+                }
+            },
+            events: []
+        };
     },
 
     computed: {
@@ -170,6 +169,7 @@ export default {
             return Object.freeze(filtered);
         }
     },
+
     methods: {
         toggleTheme(theme){
             this.theme = theme
@@ -194,9 +194,21 @@ export default {
             }
             this.selected = item.item;
         }
-    }
+    },
+
+    mounted(){
+        const storageTheme = localStorage.getItem('autosuggest-theme');
+        const theme = storageTheme || (window.matchMedia("(prefers-color-scheme: dark)").matches ? 'dark' : 'light');
+        console.log({theme});
+        this.toggleTheme(theme);
+    },
+
 };
 </script>
+
+<style lang="css">
+
+</style>
 
 <style lang="scss">
 
