@@ -90,9 +90,7 @@
                 </component>
                 <slot name="after-suggestions" />
             </div>
-
             <slot name="after-suggestions-container" />
-
         </div>
     </div>
 </template>
@@ -108,14 +106,19 @@
  * @prop {Array} data - the results
  * @prop {Number} start_index - tracks section start reference point
  * @prop {Number} end_index - tracks section end reference point
- * @prop {Object} ulClass - class for <ul> of section e.g. { 'bg-blue': true }
- * @prop {Object} liClass - class for all <li>'s in section
+ *
+//  * xxx @prop {Object} ulClass - class for <ul> of section e.g. { 'bg-blue': true }
+ * @prop {Object} sectionClass - class for  section in results (div) e.g. { 'bg-blue': true }
+ *
+//  * xxx @prop {Object} liClass - class for all <li>'s in section
+ * @prop {Object} itemClass - class for all result items in section
  */
 
 /**
  * @typedef {Object} ResultItem
  * @prop {Object<any>} item - data object
- * @prop {ResultSection.liClass} liClass
+//  * @prop {ResultSection.liClass} liClass
+* @prop {ResultSection.itemClass} itemClass
  * @prop {ResultSection.label} label
  * @prop {ResultSection.type} type
  */
@@ -127,7 +130,8 @@ const INDEX_IS_FOCUSED_ON_INPUT = -1
 
 const defaultSectionConfig = {
     name: "default",
-    type: "default-section"
+    type: "default-section",
+    // sectionClass: "hello-section"
 }
 
 export default {
@@ -232,7 +236,7 @@ export default {
             loading: false /** Helps with making sure the dropdown doesn't stay open after certain actions */,
             didSelectFromOptions: false,
             defaultInputProps: {
-                type: 'text',
+                type: "text",
                 autocomplete: "off",
             },
             /** @type Number */
@@ -310,14 +314,17 @@ export default {
             if (!section.data) return;
 
             const name = section.name ? section.name : defaultSectionConfig.name;
-            let limit, label, type, ulClass, liClass = null
+            // let limit, label, type, ulClass, liClass = null
+            let limit, label, type, sectionClass, itemClass = null;
 
             if (this.sectionConfigs[name]) {
                 limit = this.sectionConfigs[name].limit;
                 type = this.sectionConfigs[name].type;
                 label = this.sectionConfigs[name].label;
-                ulClass = this.sectionConfigs[name].ulClass;
-                liClass = this.sectionConfigs[name].liClass;
+                // ulClass = this.sectionConfigs[name].ulClass;
+                sectionClass = this.sectionConfigs[name].sectionClass;
+                // liClass = this.sectionConfigs[name].liClass;
+                itemClass = this.sectionConfigs[name].itemClass;
             }
 
             /** Set defaults for section configs. */
@@ -328,6 +335,18 @@ export default {
             limit = section.data.length < limit ? section.data.length : limit;
             label = label ? label : section.label;
 
+            // const computedSection = {
+            //     name,
+            //     label,
+            //     type,
+            //     limit,
+            //     data: section.data,
+            //     start_index: tmpSize,
+            //     end_index: tmpSize + limit - 1,
+            //     ulClass,
+            //     liClass
+            // }
+
             const computedSection = {
                 name,
                 label,
@@ -336,9 +355,10 @@ export default {
                 data: section.data,
                 start_index: tmpSize,
                 end_index: tmpSize + limit - 1,
-                ulClass,
-                liClass
+                sectionClass,
+                itemClass
             }
+
 
             tmpSize += limit;
 
@@ -412,17 +432,20 @@ export default {
         this.$emit('input', newValue);
         this.internalValue = newValue;
         if (!this.didSelectFromOptions) {
-                this.searchInputOriginal = newValue;
-                this.currentIndex = null;
+            this.searchInputOriginal = newValue;
+            this.currentIndex = null;
         }
     },
     /**
      * Helper for making sure the sectionRef getter is consistent
      * @returns {String}
      */
-    getSectionRef(i) {
-        return "computed_section_" + i;
-    },
+    // getSectionRef(i) {
+    //     return "computed_section_" + i;
+    // },
+
+    getSectionRef: (i) => "computed_section_" + i,
+
     /**
      * Helper for getting a suggestion item by index.
      * @returns {ResultItem}
@@ -439,13 +462,21 @@ export default {
                 const sectionName = this.computedSections[i].name;
                 let childSection = this.$refs[this.getSectionRef(`${sectionName}${i}`)][0];
                 if (childSection) {
+                    // obj = this.normalizeItem(
+                    //     this.computedSections[i].name,
+                    //     this.computedSections[i].type,
+                    //     childSection.section.label,
+                    //     childSection.section.liClass,
+                    //     childSection.getItemByIndex(trueIndex)
+                    // );
                     obj = this.normalizeItem(
                         this.computedSections[i].name,
                         this.computedSections[i].type,
                         childSection.section.label,
-                        childSection.section.liClass,
+                        childSection.section.itemClass,
                         childSection.getItemByIndex(trueIndex)
                     );
+
                     break;
                 }
             }
@@ -543,34 +574,44 @@ export default {
      * @return {void}
      */
     setChangeItem(item, overrideOriginalInput = false) {
-      if (this.currentIndex === null || !item) {
-        this.currentItem = null;
-        this.$emit('item-changed', null, null)
-      } else if (item) {
-        this.currentItem = item;
-        this.$emit('item-changed', item, this.currentIndex);
-        const v = this.getSuggestionValue(item);
-        this.internalValue = v;
-        if (overrideOriginalInput) {
-            this.searchInputOriginal = v;
+        if (this.currentIndex === null || !item) {
+                this.currentItem = null;
+                this.$emit("item-changed", null, null);
+        } else if (item) {
+                this.currentItem = item;
+                this.$emit("item-changed", item, this.currentIndex);
+                const v = this.getSuggestionValue(item);
+                this.internalValue = v;
+                if (overrideOriginalInput) {
+                    this.searchInputOriginal = v;
+                }
+                this.ensureItemVisible(item, this.currentIndex);
         }
-        this.ensureItemVisible(item, this.currentIndex);
-      }
     },
 
     /**
      * Function to standardize suggestion item object picked from sections
      * @returns {ResultItem}
      */
+    // normalizeItem(name, type, label, className, item) {
+    //     return {
+    //         name,
+    //         type,
+    //         label,
+    //         liClass: item.liClass || className,
+    //         item
+    //     };
+    // },
     normalizeItem(name, type, label, className, item) {
         return {
             name,
             type,
             label,
-            liClass: item.liClass || className,
+            itemClass: item.itemClass || className,
             item
         };
     },
+
 
     /**
      * Adjust the scroll position to the item in the suggestions overflow
