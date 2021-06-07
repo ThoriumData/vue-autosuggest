@@ -14,44 +14,44 @@ const times = x => f => {
 };
 
 describe("Autosuggest", () => {
-    const id = `autosuggest-input`;
-    const filteredOptions = [
+    const id = "autosuggest-input";
+    const filteredSuggestions = [
         {
-        data: [
-            "clifford brown",
-            "max roach",
-            "razzmatazz",
-            "life of lamont",
-            "life of lamont math",
-            "pearly-dewdrops’ drops",
-            "math mammoth light blue",
-            "fluffy tufts",
-            "math",
-            "rococo",
-            "necessitatibus",
-            "modi voluptatem est",
-            "snap crackle pop",
-            "bath toys",
-            "omnis voluptas ut",
-            "lamont",
-            "lorelei",
-            "multiplication",
-            "thinking tree"
-        ]
+            data: [
+                "clifford brown",
+                "max roach",
+                "razzmatazz",
+                "life of lamont",
+                "life of lamont math",
+                "pearly-dewdrops’ drops",
+                "math mammoth light blue",
+                "fluffy tufts",
+                "math",
+                "rococo",
+                "necessitatibus",
+                "modi voluptatem est",
+                "snap crackle pop",
+                "bath toys",
+                "omnis voluptas ut",
+                "lamont",
+                "lorelei",
+                "multiplication",
+                "thinking tree"
+            ]
         }
     ];
 
     const defaultProps = {
-        suggestions: filteredOptions,
+        suggestions: filteredSuggestions,
         inputProps: {
-        id,
-        placeholder: "Type 'G'"
+            id,
+            placeholder: "Type 'G'"
         },
         sectionConfigs: {
-        default: {
-            limit: 5,
-            onSelected: () => {}
-        }
+            default: {
+                limit: 5,
+                onSelected: () => {}
+            }
         }
     };
 
@@ -63,7 +63,7 @@ describe("Autosuggest", () => {
         const props = Object.assign({}, defaultProps);
         props.inputProps = Object.assign({}, defaultProps.inputProps);
 
-        props.suggestions = [filteredOptions[0]];
+        props.suggestions = [filteredSuggestions[0]];
 
         const wrapper = shallowMount(Autosuggest, {
             propsData: props
@@ -403,7 +403,7 @@ describe("Autosuggest", () => {
         // expect(parseInt(activeDescendentString[activeDescendentString.length - 1])).toBe(
         //   mouseDownTimes - 1
         // );
-        // expect(input.element.value).toBe(filteredOptions[0].data[mouseDownTimes - 1]);
+        // expect(input.element.value).toBe(filteredSuggestions[0].data[mouseDownTimes - 1]);
 
         const renderer = createRenderer();
         renderer.renderToString(wrapper.vm, (err, str) => {
@@ -420,7 +420,7 @@ describe("Autosuggest", () => {
         const props = Object.assign({}, defaultProps);
         props.inputProps = Object.assign({}, defaultProps.inputProps);
         props.inputProps.class = "cool-class";
-        props.suggestions = filteredOptions;
+        props.suggestions = filteredSuggestions;
 
         delete props.suggestions[0].name; // ensure empty component name is OK
         delete props.sectionConfigs; // ensure empty sectionConfigs is OK
@@ -429,8 +429,8 @@ describe("Autosuggest", () => {
         props.onSelected = () => {};
 
         const wrapper = mount(Autosuggest, {
-        propsData: props,
-        //   attachToDocument: true
+            propsData: props,
+            //   attachToDocument: true
         });
 
         const input = wrapper.find("input");
@@ -438,7 +438,7 @@ describe("Autosuggest", () => {
         await input.setValue("G");
 
         times(3)( async () => {
-        await input.trigger("keydown.down");
+            await input.trigger("keydown.down");
         });
 
         // wrapper.find("li").trigger("mouseover");
@@ -464,12 +464,12 @@ describe("Autosuggest", () => {
         props.suggestions = [
         {
             data: [
-            {
-                id: 1,
-                name: "Frodo",
-                avatar:
-                "https://upload.wikimedia.org/wikipedia/en/4/4e/Elijah_Wood_as_Frodo_Baggins.png"
-            }
+                {
+                    id: 1,
+                    name: "Frodo",
+                    avatar:
+                    "https://upload.wikimedia.org/wikipedia/en/4/4e/Elijah_Wood_as_Frodo_Baggins.png"
+                }
             ]
         }
         ];
@@ -506,8 +506,8 @@ describe("Autosuggest", () => {
         props.inputProps = { ...defaultProps.inputProps, name: "my-input" };
 
         const wrapper = mount(Autosuggest, {
-        propsData: props,
-        //   attachToDocument: true
+            propsData: props,
+            //   attachToDocument: true
         });
 
         const input = wrapper.find("input");
@@ -794,7 +794,7 @@ describe("Autosuggest", () => {
             type: 'search'
         };
 
-        props.suggestions = [filteredOptions[0]];
+        props.suggestions = [filteredSuggestions[0]];
 
         const wrapper = shallowMount(Autosuggest, {
             propsData: props,
