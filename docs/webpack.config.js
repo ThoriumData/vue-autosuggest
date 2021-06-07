@@ -46,17 +46,6 @@ module.exports = {
                     'css-loader'
                 ]
             },
-            // {
-            //     test: /\.css$/,
-            //     use: [
-            //         {
-            //             loader: 'vue-style-loader'
-            //         },
-            //         {
-            //             loader: 'css-loader',
-            //         }
-            //     ]
-            // },
 
 
             // this will apply to both plain `.scss` files
@@ -65,14 +54,12 @@ module.exports = {
                 test: /\.s[ac]ss$/i,
                 use: [
                     'vue-style-loader',
-                    // 'css-loader',
                     {
                         loader: 'css-loader',
                         options: {
                             sourceMap: true
                         }
                     },
-                    // 'sass-loader'
                     {
                         loader: 'sass-loader',
                         options: {
