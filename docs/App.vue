@@ -98,11 +98,7 @@ export default {
             ),
 
             sectionConfigs: {
-            // default: {
-            //     limit: 4,
-            //     ulClass: null,
-            //     liClass: {'elf-row': true }
-            // },
+
                 default: {
                     limit: 4,
                     sectionClass: null,
@@ -140,7 +136,7 @@ export default {
     computed: {
 
         oppositeTheme() {
-            return (this.theme === 'light') ? 'dark' : 'light'
+            return (this.theme === 'light') ? 'dark' : 'light';
         },
 
         filteredOptions() {
@@ -152,9 +148,8 @@ export default {
                 const people = this.options.filter(o => o.name === r)[0].data.filter(p => {
                     return p.Name.toLowerCase().indexOf(this.searchText.toLowerCase()) > -1;
                 }).map(p => {
-                    // p.liClass = p.Name === 'Gandalf' ? {'gandalf': true} : null
-                    p.itemClass = p.Name === 'Gandalf' ? {'gandalf': true} : null
-                    return p
+                    p.itemClass = p.Name === 'Gandalf' ? {'gandalf': true} : null;
+                    return p;
                 });
 
                 people.length > 0 &&
@@ -206,14 +201,11 @@ export default {
 };
 </script>
 
-<style lang="css">
-
-</style>
-
 <style lang="scss">
 
 $font-size: .9rem;
 
+// for demo/doc
 button {
     position: absolute;
     right: 1rem;
@@ -230,14 +222,17 @@ button {
     cursor: pointer;
 }
 
+// for demo/doc
 h1 {
     color: var(--theme-header);
 }
 
+// for demo/doc
 * {
     transition: height 0.2s linear;
     transition: border-color linear 0.1s;
 }
+
 
 #demo-autosuggest {
     label {
@@ -290,25 +285,30 @@ h1 {
 }
 
 .autosuggest__results {
-    ul {
-        list-style: none;
-        padding-left: 0;
-        margin: 0;
+    // ul {
+    //     list-style: none;
+    //     padding-left: 0;
+    //     margin: 0;
+    //     background-color: var(--theme-bg);
+    // }
+
+    .autosuggest__results-item {
+        cursor: pointer;
         background-color: var(--theme-bg);
+        padding: 10px;
     }
+
+
 }
 
-.autosuggest__results .autosuggest__results-item {
-    cursor: pointer;
-    background-color: var(--theme-bg);
-    padding: 10px;
-}
 
 #autosuggest ul:nth-child(1) > .autosuggest__results-before {
     border-top: none;
 }
 
 .autosuggest__results {
+
+    // slot
     .autosuggest__results-before {
         color: var(--theme-color);
         opacity: 0.5;
@@ -319,14 +319,24 @@ h1 {
     }
 }
 
-.autosuggest__results .autosuggest__results-item:active,
-.autosuggest__results .autosuggest__results-item:hover,
-.autosuggest__results .autosuggest__results-item:focus,
-.autosuggest__results .autosuggest__results-item.autosuggest__results-item--highlighted {
-    background-color: var(--theme-item_bg_highlighted);
-    color: var(--theme-item_color_highlighted);
+// .autosuggest__results .autosuggest__results-item:active,
+// .autosuggest__results .autosuggest__results-item:hover,
+// .autosuggest__results .autosuggest__results-item:focus,
+// .autosuggest__results .autosuggest__results-item.autosuggest__results-item--highlighted {
+//     background-color: var(--theme-item_bg_highlighted);
+//     color: var(--theme-item_color_highlighted);
+// }
+
+.autosuggest__results {
+    .autosuggest__results-item--highlighted {
+        background-color: var(--theme-item_bg_highlighted);
+        color: var(--theme-item_color_highlighted);
+    }
+
 }
 
+
+// event log element
 /* @media screen and (max-width: 900px) {
   .event-log {
     display: none;
