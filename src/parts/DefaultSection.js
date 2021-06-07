@@ -35,9 +35,9 @@ const DefaultSection = {
         };
     },
     computed: {
-        /**
-         * Suggestions from the section
-         */
+
+        // suggestions from the section
+        // limit number to `limit` defined in the section config, or to number of items (if < limit)
         list: function () {
             let {limit, data} = this.section;
             if (data.length < limit) {
@@ -62,6 +62,7 @@ const DefaultSection = {
             this.$emit("updateCurrentIndex", null);
         },
     },
+
     // eslint-disable-next-line no-unused-vars
     render (h) {
         const componentAttrPrefix = this.componentAttrPrefix;
@@ -77,15 +78,9 @@ const DefaultSection = {
             className: beforeClassName
         }) || [];
 
-        // console.log("this.section.sectionClass", this.section.sectionClass);
-        // a section in results
-        return h(
+        return h (
+            // each suggestion section in results
             "div",
-
-            // {
-            //     attrs: { role: "listbox", "aria-labelledby": this.section.label && `${this.componentAttrIdAutosuggest}-${this.section.label}` },
-            //     class: this.section.ulClass
-            // },
             {
                 attrs: {
                     role: "listbox",
@@ -93,7 +88,6 @@ const DefaultSection = {
                 },
                 class: {
                     "autosuggest-section": true,
-                    // [`${this.section.sectionClass}`]: this.section.sectionClass ? true : null
                     ...this.section.sectionClass
                 }
             },
@@ -101,13 +95,12 @@ const DefaultSection = {
             [
                 before[0] && before[0] || this.section.label && <div class={beforeClassName} id={`${this.componentAttrIdAutosuggest}-${this.section.label}`}>{this.section.label}</div> || '',
                 this.list.map((val, key) => {
-                // const item = this.normalizeItemFunction(this.section.name, this.section.type, this.section.label, this.section.liClass, val);
                 const item = this.normalizeItemFunction(this.section.name, this.section.type, this.section.label, this.section.itemClass, val);
                 const itemIndex = this.getItemIndex(key);
                 const isHighlighted = this._currentIndex === itemIndex || parseInt(this.currentIndex) === itemIndex;
 
-                // collection of items in a results section
                 return h(
+                     // collection of items in a results section
                     "div",
                     {
                         attrs: {
@@ -115,14 +108,8 @@ const DefaultSection = {
                             "data-suggestion-index": itemIndex,
                             "data-section-name": item.name,
                             id: `${componentAttrPrefix}__results-item--${itemIndex}`,
-                            // ...item.liAttributes
                         },
                         key: itemIndex,
-                        // class: {
-                        //     [`${componentAttrPrefix}__results-item--highlighted`]: isHighlighted,
-                        //     [`${componentAttrPrefix}__results-item`]: true,
-                        //     ...item.liClass
-                        // },
                         class: {
                             [`${componentAttrPrefix}__results-item--highlighted`]: isHighlighted,
                             [`${componentAttrPrefix}__results-item`]: true,
