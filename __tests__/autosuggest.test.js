@@ -14,7 +14,7 @@ const times = x => f => {
 };
 
 describe("Autosuggest", () => {
-    const id = `autosuggest__input`;
+    const id = `autosuggest-input`;
     const filteredOptions = [
         {
         data: [
@@ -255,18 +255,18 @@ describe("Autosuggest", () => {
         await input1.trigger("click");
         await input2.trigger("click");
 
-        expect(autosuggest1.findAll("div.autosuggest__results-item").length).toBe(5);
-        expect(autosuggest2.findAll("div.autosuggest__results-item").length).toBe(5);
+        expect(autosuggest1.findAll("div.autosuggest-results-item").length).toBe(5);
+        expect(autosuggest2.findAll("div.autosuggest-results-item").length).toBe(5);
 
         times(2)( async () => {
             await input2.trigger("keydown.down");
         });
 
 
-        // expect(autosuggest2.findAll("li").at(1).classes()).toContain("autosuggest__results-item-highlighted");
+        // expect(autosuggest2.findAll("li").at(1).classes()).toContain("autosuggest-results-item-highlighted");
 
-        expect(autosuggest1.findAll("div.autosuggest__results-item-highlighted").length).toBe(0);
-        expect(autosuggest2.findAll("div.autosuggest__results-item-highlighted").length).toBe(1);
+        expect(autosuggest1.findAll("div.autosuggest-results-item-highlighted").length).toBe(0);
+        expect(autosuggest2.findAll("div.autosuggest-results-item-highlighted").length).toBe(1);
 
         await input2.trigger("keydown.enter");
 
@@ -366,12 +366,12 @@ describe("Autosuggest", () => {
         const combobox = wrapper.find("[role='combobox']");
         expect(combobox.exists()).toBeTruthy();
         expect(combobox.attributes()["aria-haspopup"]).toBe("listbox");
-        expect(combobox.attributes()["aria-owns"]).toBe("autosuggest-autosuggest__results");
+        expect(combobox.attributes()["aria-owns"]).toBe("autosuggest-autosuggest-results");
 
         const input = combobox.find("input");
         expect(input.attributes()["aria-autocomplete"]).toBe("list");
         expect(input.attributes()["aria-activedescendant"]).toBe("");
-        expect(input.attributes()["aria-controls"]).toBe("autosuggest-autosuggest__results");
+        expect(input.attributes()["aria-controls"]).toBe("autosuggest-autosuggest-results");
 
         // aria owns needs to be an "id", #191
         let results = wrapper.find(`#${combobox.attributes()["aria-owns"]}`);
@@ -444,9 +444,9 @@ describe("Autosuggest", () => {
         // wrapper.find("li").trigger("mouseover");
         // wrapper.find("li").trigger("mouseenter");
         // wrapper.find("li").trigger("mouseleave");
-        await wrapper.find("div.autosuggest__results-item").trigger("mouseover");
-        await wrapper.find("div.autosuggest__results-item").trigger("mouseenter");
-        await wrapper.find("div.autosuggest__results-item").trigger("mouseleave");
+        await wrapper.find("div.autosuggest-results-item").trigger("mouseover");
+        await wrapper.find("div.autosuggest-results-item").trigger("mouseenter");
+        await wrapper.find("div.autosuggest-results-item").trigger("mouseleave");
 
         const renderer = createRenderer();
         renderer.renderToString(wrapper.vm, (err, str) => {
@@ -706,8 +706,8 @@ describe("Autosuggest", () => {
         // Prefix checks
         // expect(wrapper.find('#v__results-item-0').is('li')).toBeTruthy()
         // expect(wrapper.find('.v__results-item').is('li')).toBeTruthy()
-        expect(wrapper.find('#v__results-item-0').is('div')).toBeTruthy();
-        expect(wrapper.find('.v__results-item').is('div')).toBeTruthy();
+        expect(wrapper.find('#v-results-item-0').is('div')).toBeTruthy();
+        expect(wrapper.find('.v-results-item').is('div')).toBeTruthy();
 
         const renderer = createRenderer();
         renderer.renderToString(wrapper.vm, (err, str) => {
@@ -871,11 +871,11 @@ describe("Autosuggest", () => {
         await input.trigger("keydown.down");
 
 
-        expect(wrapper.findAll("div.autosuggest__results-item-highlighted")).toHaveLength(1);
+        expect(wrapper.findAll("div.autosuggest-results-item-highlighted")).toHaveLength(1);
 
-        const item = wrapper.find("div.autosuggest__results-item-highlighted");
+        const item = wrapper.find("div.autosuggest-results-item-highlighted");
         expect(item.attributes('data-suggestion-index')).toBe('0')
-        expect(input.attributes('aria-activedescendant')).toBe('autosuggest__results-item-0')
+        expect(input.attributes('aria-activedescendant')).toBe('autosuggest-results-item-0')
 
         const renderer = createRenderer();
         renderer.renderToString(wrapper.vm, (err, str) => {
@@ -910,7 +910,7 @@ describe("Autosuggest", () => {
         const sectionElement = wrapper.find("div.autosuggest-section");
 
         // const li = ul.find("li:nth-child(1)");
-        const subElement = sectionElement.find("div.autosuggest__results-item:nth-child(1)");
+        const subElement = sectionElement.find("div.autosuggest-results-item:nth-child(1)");
 
         // expect(sectionElement.classes()).toContain('hello-section');
         expect(subElement.classes()).toContain('hello-item');

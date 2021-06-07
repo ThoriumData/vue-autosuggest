@@ -72,11 +72,11 @@ const DefaultSection = {
             afterSectionNamed: this.$scopedSlots[`after-section-${this.section.name}`]
         };
 
-        const beforeClassName = `${componentAttrPrefix}__results-before ${componentAttrPrefix}__results-before--${this.section.name}`;
-        const before = slots.beforeSection && slots.beforeSection ({
+        const beforeClassName = `${componentAttrPrefix}-results-before ${componentAttrPrefix}-results-before-${this.section.name}`;
+        const before = (slots.beforeSection && slots.beforeSection ({
             section: this.section,
             className: beforeClassName
-        }) || [];
+        })) || [];
 
         return h (
             // each suggestion section in results
@@ -93,50 +93,54 @@ const DefaultSection = {
             },
 
             [
-                before[0] && before[0] || this.section.label && <div class={beforeClassName} id={`${this.componentAttrIdAutosuggest}-${this.section.label}`}>{this.section.label}</div> || '',
+                // named before section
+                before[0] && before[0] || this.section.label && <div class={beforeClassName} id={`${this.componentAttrIdAutosuggest}-${this.section.label}`}>{this.section.label}</div> || "",
+                // before[0] && before[0] || this.section.label && <div class={beforeClassName} id={`${componentAttrIdAutosuggest}-${this.section.name}`}> {this.section.label}</div> || "",
+
                 this.list.map((val, key) => {
-                const item = this.normalizeItemFunction(this.section.name, this.section.type, this.section.label, this.section.itemClass, val);
-                const itemIndex = this.getItemIndex(key);
-                const isHighlighted = this._currentIndex === itemIndex || parseInt(this.currentIndex) === itemIndex;
+                    const item = this.normalizeItemFunction(this.section.name, this.section.type, this.section.label, this.section.itemClass, val);
+                    const itemIndex = this.getItemIndex(key);
+                    const isHighlighted = this._currentIndex === itemIndex || parseInt(this.currentIndex) === itemIndex;
 
-                return h(
-                     // collection of items in a results section
-                    "div",
-                    {
-                        attrs: {
-                            role: "option",
-                            "data-suggestion-index": itemIndex,
-                            "data-section-name": item.name,
-                            id: `${componentAttrPrefix}__results-item--${itemIndex}`,
+                    return h (
+                        // collection of items in a results section
+                        "div",
+                        {
+                            attrs: {
+                                role: "option",
+                                "data-suggestion-index": itemIndex,
+                                "data-section-name": item.name,
+                                id: `${componentAttrPrefix}-results-item-${itemIndex}`,
+                                ...item.itemAttributes,
+                            },
+                            key: itemIndex,
+                            class: {
+                                [`${componentAttrPrefix}-results-item-highlighted`]: isHighlighted,
+                                [`${componentAttrPrefix}-results-item`]: true,
+                                ...item.itemClass
+                            },
+                            on: {
+                                mouseenter: this.onMouseEnter,
+                                mouseleave: this.onMouseLeave
+                            },
                         },
-                        key: itemIndex,
-                        class: {
-                            [`${componentAttrPrefix}__results-item--highlighted`]: isHighlighted,
-                            [`${componentAttrPrefix}__results-item`]: true,
-                            ...item.itemClass
-                        },
-                        on: {
-                            mouseenter: this.onMouseEnter,
-                            mouseleave: this.onMouseLeave
-                        },
-                    },
-                    [
-                        this.renderSuggestion ? this.renderSuggestion(item) : this.$scopedSlots.default && this.$scopedSlots.default ({
-                            _key: key,
-                            suggestion: item,
-                        }),
-                    ]
-                );
+                        [
+                            this.renderSuggestion ? this.renderSuggestion(item) : this.$scopedSlots.default && this.$scopedSlots.default ({
+                                _key: key,
+                                suggestion: item,
+                            }),
+                        ]
+                    );
                 }),
 
-                slots.afterSectionDefault && slots.afterSectionDefault({
+                slots.afterSectionDefault && slots.afterSectionDefault ({
                     section: this.section,
-                    className: `${componentAttrPrefix}__results-after ${componentAttrPrefix}__results-after--${this.section.name}`
+                    className: `${componentAttrPrefix}-results-after ${componentAttrPrefix}-results-after-${this.section.name}`
                 }),
 
-                slots.afterSectionNamed && slots.afterSectionNamed({
+                slots.afterSectionNamed && slots.afterSectionNamed ({
                     section: this.section,
-                    className: `${componentAttrPrefix}__results_after ${componentAttrPrefix}__results-after--${this.section.name}`
+                    className: `${componentAttrPrefix}-results-after ${componentAttrPrefix}-results-after-${this.section.name}`
                 }),
             ]
         );

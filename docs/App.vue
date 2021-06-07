@@ -20,41 +20,51 @@
                 ref="autocomplete"
             >
                 <template slot="before-input">
-                <label :for="inputProps.id">Select a LOTR Character</label>
+                    <label :for="inputProps.id">Select a Character</label>
                 </template>
+
                 <template slot-scope="{suggestion, index, cs}">
-                <div>{{ suggestion && suggestion.item.Name }}</div>
+                    <div>{{ suggestion && suggestion.item.Name }}</div>
                 </template>
+
                 <template slot="after-suggestions">
-                <p v-if="filteredOptions == 0" style="text-align: center;">No Results... Try <a style="color: peachpuff;" :href="`https://www.google.com/search?safe=active&source=hp&ei=t_M-Xci6EYq6tgXrzbLoCw&q=${searchText}`" @mouseup.stop target="_blank">googling</a></p>
+                    <p v-if="filteredOptions == 0" style="text-align: center;">
+                        No Results... Try <a style="color: peachpuff;" :href="`https://www.google.com/search?safe=active&source=hp&ei=t_M-Xci6EYq6tgXrzbLoCw&q=${searchText}`" @mouseup.stop target="_blank">googling</a>
+                    </p>
                 </template>
+
             </vue-autosuggest>
         </div>
 
-        <div style="padding-top:10px; margin-bottom: 10px;">
-            <span
-                v-if="selected.Race === 'Human' && selected.Name === 'Aragorn I'"
-                >"Not idly do the leaves of Lórien fall," proclaimed Aragorn.
+        <div class="characterCommentary">
+            <span v-if="selected.Race === 'Human' && selected.Name === 'Aragorn I'">
+                "Not idly do the leaves of Lórien fall," proclaimed Aragorn.
             </span>
             <span v-else-if="selected.Race === 'Human'">
                 You have choosen poorly. Humans
                 are like... the worst.
             </span>
-            <span
-                v-else-if="selected.Race === 'Elf' && selected.Name === 'Legolas'"
-            >Legolas is like... so hawt.</span>
+            <span v-else-if="selected.Race === 'Elf' && selected.Name === 'Legolas'">
+                Legolas is like... so hawt.
+            </span>
             <span v-else-if="selected.Race === 'Elf' && selected.Name === 'Galadriel'">
                 "Things that were... things that are... and some things... that have not
                 yet come to pass." Wait... is that in the book?!
             </span>
-            <span v-else-if="selected.Race === 'Dwarf' && selected.Name === 'Gimli'">And with my axe!</span>
-            <span v-else-if="selected.Race === 'Dwarf'">What is the plural of Dwarf anyways?</span>
+            <span v-else-if="selected.Race === 'Dwarf' && selected.Name === 'Gimli'">
+                And with my axe!
+            </span>
+            <span v-else-if="selected.Race === 'Dwarf'">
+                What is the plural of Dwarf anyways?
+            </span>
             <span v-else-if="selected.Race === 'Maiar' && selected.Name === 'Gandalf'">
                 The counsel of Gandalf was not founded on foreknowledge of safety, for
                 himself or for others," said Aragorn. "There are some things that it is
                 better to begin than to refuse, even though the end may be dark."
             </span>
-            <span v-else-if="selected.Race === 'Hobbit'">Sneaky little Hobbitses. Wicked. Tricksy.</span>
+            <span v-else-if="selected.Race === 'Hobbit'">
+                Sneaky little Hobbitses. Wicked. Tricksy.
+            </span>
         </div>
 
         <div class="event-log">
@@ -102,15 +112,16 @@ export default {
                 default: {
                     limit: 4,
                     sectionClass: null,
-                    itemClass: {'elf-row': true }
+                    itemClass: null,
                 },
 
                 Elf: {
-                    limit: 6
+                    limit: 6,
+                    itemClass: {'elf-row': true }
                 }
             },
             inputProps: {
-                id: "autosuggest__input",
+                id: "autosuggest-input",
                 placeholder: "Search..."
             },
             themes: {
@@ -205,6 +216,9 @@ export default {
 
 $font-size: .9rem;
 
+$autosuggest-item-hilight-color:     #E1FFB9;
+
+
 // for demo/doc
 button {
     position: absolute;
@@ -233,7 +247,7 @@ h1 {
     transition: border-color linear 0.1s;
 }
 
-
+// for demo/doc
 #demo-autosuggest {
     label {
         margin-bottom: 1rem;
@@ -241,7 +255,14 @@ h1 {
     }
 }
 
-#autosuggest__input {
+.characterCommentary {
+    margin-bottom: 1rem;
+    padding-top: 1rem;
+}
+
+
+
+#autosuggest-input {
     background-color: var(--theme-bg);
     caret-color: #ddd;
     color: var(--theme-color);
@@ -256,20 +277,25 @@ h1 {
     box-sizing: border-box;
 }
 
-#autosuggest__input.autosuggest__input--open,
-#autosuggest__input:hover {
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-    border: 1px solid lightgray;
+#autosuggest-input {
+
+    &.autosuggest-input-open,
+    &:hover {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        border: 1px solid lightgray;
+    }
 }
 
-.autosuggest__results-container {
+
+
+.autosuggest-results-container {
     position: relative;
     width: 100%;
     background-color: var(--theme-bg);
 }
 
-.autosuggest__results {
+.autosuggest-results {
     background-color: var(--theme-bg);
     font-weight: 300;
     margin: 0;
@@ -282,36 +308,45 @@ h1 {
     padding: 0px;
     overflow: scroll;
     max-height: 400px;
-}
 
-.autosuggest__results {
-    // ul {
-    //     list-style: none;
-    //     padding-left: 0;
-    //     margin: 0;
-    //     background-color: var(--theme-bg);
-    // }
-
-    .autosuggest__results-item {
+    .autosuggest-results-item {
         cursor: pointer;
         background-color: var(--theme-bg);
         padding: 10px;
     }
 
-
 }
 
 
-#autosuggest ul:nth-child(1) > .autosuggest__results-before {
-    border-top: none;
+
+// #autosuggest ul:nth-child(1) > .autosuggest-results-before {
+//     border-top: none;
+// }
+// #autosuggest {
+//     ul:nth-child(1) {
+//         > .autosuggest-results-before {
+//             border-top: none;
+//         }
+
+//     }
+// }
+
+#autosuggest {
+    .autosuggest-section:nth-child(1) {
+        > .autosuggest-results-before {
+            border-top: none;
+        }
+    }
 }
 
-.autosuggest__results {
+
+
+.autosuggest-results {
 
     // slot
-    .autosuggest__results-before {
+    .autosuggest-results-before {
         color: var(--theme-color);
-        opacity: 0.5;
+        // opacity: 0.5;
         font-size: 11px;
         margin-left: 0;
         padding: 15px 13px 5px;
@@ -319,20 +354,25 @@ h1 {
     }
 }
 
-// .autosuggest__results .autosuggest__results-item:active,
-// .autosuggest__results .autosuggest__results-item:hover,
-// .autosuggest__results .autosuggest__results-item:focus,
-// .autosuggest__results .autosuggest__results-item.autosuggest__results-item--highlighted {
+// .autosuggest-results .autosuggest-results-item:active,
+// .autosuggest-results .autosuggest-results-item:hover,
+// .autosuggest-results .autosuggest-results-item:focus,
+// .autosuggest-results .autosuggest-results-item.autosuggest-results-item-highlighted {
 //     background-color: var(--theme-item_bg_highlighted);
 //     color: var(--theme-item_color_highlighted);
 // }
 
-.autosuggest__results {
-    .autosuggest__results-item--highlighted {
-        background-color: var(--theme-item_bg_highlighted);
-        color: var(--theme-item_color_highlighted);
-    }
+.autosuggest-results {
+    .autosuggest-results-item {
 
+        &:active,
+        &:hover,
+        &:focus,
+        &.autosuggest-results-item-highlighted {
+            background-color: var(--theme-item_bg_highlighted);
+            color: var(--theme-item_color_highlighted);
+        }
+    }
 }
 
 

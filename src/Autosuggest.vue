@@ -1,22 +1,24 @@
 <template>
     <div :id="componentAttrIdAutosuggest">
-        <slot name="before-input" />
+
+        <!-- // before input slot: disabled -->
+        <!-- <slot name="before-input" /> -->
 
         <div
             role="combobox"
             :aria-expanded="isOpen ? 'true' : 'false'"
             aria-haspopup="listbox"
-            :aria-owns="`${componentAttrIdAutosuggest}-${componentAttrPrefix}__results`"
+            :aria-owns="`${componentAttrIdAutosuggest}-${componentAttrPrefix}-results`"
             >
             <input
-                :type="internal_inputProps.type"
+                :type="computed_inputProps.type"
                 :value="internalValue"
-                :autocomplete="internal_inputProps.autocomplete"
-                :class="[isOpen ? `${componentAttrPrefix}__input--open` : '', internal_inputProps['class']]"
-                v-bind="internal_inputProps"
+                :autocomplete="computed_inputProps.autocomplete"
+                :class="[isOpen ? `${componentAttrPrefix}-input-open` : '', computed_inputProps['class']]"
+                v-bind="computed_inputProps"
                 aria-autocomplete="list"
-                :aria-activedescendant="isOpen && currentIndex !== null ? `${componentAttrPrefix}__results-item--${currentIndex}` : ''"
-                :aria-controls="`${componentAttrIdAutosuggest}-${componentAttrPrefix}__results`"
+                :aria-activedescendant="isOpen && currentIndex !== null ? `${componentAttrPrefix}-results-item-${currentIndex}` : ''"
+                :aria-controls="`${componentAttrIdAutosuggest}-${componentAttrPrefix}-results`"
                 @input="inputHandler"
                 @keydown="handleKeyStroke"
                 v-on="listeners"
@@ -26,7 +28,7 @@
         <slot name="after-input" />
 
         <div
-            :id="`${componentAttrIdAutosuggest}-${componentAttrPrefix}__results`"
+            :id="`${componentAttrIdAutosuggest}-${componentAttrPrefix}-results`"
             :class="_componentAttrClassAutosuggestResultsContainer"
             >
             <div
@@ -64,7 +66,7 @@
                         :suggestion="suggestion"
                         :index="_key"
                         >
-                        {{ suggestion.item }}
+                            {{ suggestion.item }}
                         </slot>
                     </template>
 
@@ -90,7 +92,9 @@
                 </component>
                 <slot name="after-suggestions" />
             </div>
+
             <slot name="after-suggestions-container" />
+
         </div>
     </div>
 </template>
@@ -107,17 +111,17 @@
  * @prop {Number} start_index - tracks section start reference point
  * @prop {Number} end_index - tracks section end reference point
  *
-//  * xxx @prop {Object} ulClass - class for <ul> of section e.g. { 'bg-blue': true }
- * @prop {Object} sectionClass - class for  section in results (div) e.g. { 'bg-blue': true }
+   //  xxx @prop {Object} ulClass - class for <ul> of section e.g. { 'bg-blue': true }
+ * @prop {Object} sectionClass - class for section in results (div) e.g. { 'bg-blue': true }
  *
-//  * xxx @prop {Object} liClass - class for all <li>'s in section
+   //  xxx @prop {Object} liClass - class for all <li>'s in section
  * @prop {Object} itemClass - class for all result items in section
  */
 
 /**
  * @typedef {Object} ResultItem
  * @prop {Object<any>} item - data object
-//  * @prop {ResultSection.liClass} liClass
+   //  xxx @prop {ResultSection.liClass} liClass
  * @prop {ResultSection.itemClass} itemClass
  * @prop {ResultSection.label} label = ui-facing label
  * @prop {ResultSection.type} type
@@ -172,7 +176,8 @@ export default {
             required: false,
             default: (suggestion) => {
                 const item = suggestion.item;
-                if (typeof item === "object" && item.hasOwnProperty("name")) {
+                // if (typeof item === "object" && item.hasOwnProperty("name")) {
+                if (typeof item === "object" && Object.prototype.hasOwnProperty.call(item, "name")) {
                     return item.name;
                 } else {
                     return item;
@@ -210,12 +215,12 @@ export default {
         componentAttrClassAutosuggestResultsContainer: {
             type: String,
             required: false,
-            default: null  // `${componentAttrPrefix}__results-container`
+            default: null  // `${componentAttrPrefix}-results-container`
         },
         componentAttrClassAutosuggestResults: {
             type: String,
             required: false,
-            default: null // `${componentAttrPrefix}__results`
+            default: null // `${componentAttrPrefix}-results`
         },
         componentAttrPrefix: {
             type: String,
@@ -247,7 +252,7 @@ export default {
         /**
          * Merged object for defaults + user defined `<input/>` props
          */
-        internal_inputProps() {
+        computed_inputProps() {
             return {
                 ...this.defaultInputProps,
                 ...this.inputProps
@@ -380,10 +385,10 @@ export default {
         },
 
         _componentAttrClassAutosuggestResultsContainer () {
-            return this.componentAttrClassAutosuggestResultsContainer || `${this.componentAttrPrefix}__results-container`
+            return this.componentAttrClassAutosuggestResultsContainer || `${this.componentAttrPrefix}-results-container`
         },
         _componentAttrClassAutosuggestResults () {
-            return this.componentAttrClassAutosuggestResults || `${this.componentAttrPrefix}__results`
+            return this.componentAttrClassAutosuggestResults || `${this.componentAttrPrefix}-results`
         },
     },
 
@@ -629,7 +634,7 @@ export default {
             return;
         }
 
-        const itemElement = resultsScrollElement.querySelector(`#${this.componentAttrPrefix}__results-item--${index}`);
+        const itemElement = resultsScrollElement.querySelector(`#${this.componentAttrPrefix}-results-item-${index}`);
 
         if (!itemElement) {
             return;
@@ -724,8 +729,8 @@ export default {
         }
 
         this.currentIndex = adjustedValue;
-        const element = this.$el.querySelector(`#${this.componentAttrPrefix}__results-item--${this.currentIndex}`);
-        const hoverClass = `${this.componentAttrPrefix}__results-item--highlighted`;
+        const element = this.$el.querySelector(`#${this.componentAttrPrefix}-results-item-${this.currentIndex}`);
+        const hoverClass = `${this.componentAttrPrefix}-results-item-highlighted`;
 
         if (this.$el.querySelector(`.${hoverClass}`)) {
             removeClass(this.$el.querySelector(`.${hoverClass}`), hoverClass);
