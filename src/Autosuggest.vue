@@ -25,7 +25,8 @@
                 >
         </div>
 
-        <slot name="after-input" />
+        <!-- // after input slot: disabled -->
+        <!-- <slot name="after-input" /> -->
 
         <div
             :id="`${componentAttrIdAutosuggest}-${componentAttrPrefix}-results`"
@@ -90,9 +91,12 @@
                         />
                     </template>
                 </component>
+
+                <!-- after the suggestions, in the 'dropdown' -->
                 <slot name="after-suggestions" />
             </div>
 
+            <!-- after all suggestions, outside of the 'dropdown' -->
             <slot name="after-suggestions-container" />
 
         </div>
