@@ -1,8 +1,13 @@
+/**
+AutoSuggest
+SOURCE
+*/
+
 <template>
     <div :id="componentAttrIdAutosuggest">
 
-        <!-- // before input slot: disabled -->
-        <!-- <slot name="before-input" /> -->
+        <!-- // before input slot -->
+        <slot name="before-input" />
 
         <div
             role="combobox"
@@ -25,8 +30,8 @@
                 >
         </div>
 
-        <!-- // after input slot: disabled -->
-        <!-- <slot name="after-input" /> -->
+        <!-- // after input slot -->
+        <slot name="after-input" />
 
         <div
             :id="`${componentAttrIdAutosuggest}-${componentAttrPrefix}-results`"
@@ -92,11 +97,11 @@
                     </template>
                 </component>
 
-                <!-- after the suggestions, in the 'dropdown' -->
+                <!-- after the suggestions, within the list of suggestions element -->
                 <slot name="after-suggestions" />
             </div>
 
-            <!-- after all suggestions, outside of the 'dropdown' -->
+            <!-- after all suggestions, outside of the list of suggestions element -->
             <slot name="after-suggestions-container" />
 
         </div>
@@ -142,11 +147,11 @@ const defaultSectionConfig = {
 }
 
 export default {
-    name: "Autosuggest",
+    name: "AutoSuggest",
 
     components: {
-            /* eslint-disable-next-line vue/no-unused-components */
-            DefaultSection
+        /* eslint-disable-next-line vue/no-unused-components */
+        DefaultSection
     },
 
     props: {
@@ -336,7 +341,6 @@ export default {
 
                 /** Set defaults for section configs. */
                 type = type ? type : defaultSectionConfig.type;
-
                 limit = limit || this.limit;
                 limit = limit ? limit : Infinity;
                 limit = section.data.length < limit ? section.data.length : limit;
@@ -365,12 +369,9 @@ export default {
                     sectionClass,
                     itemClass
                 }
-
-
                 tmpSize += limit;
-
                 return computedSection;
-        })
+            })
         },
 
         /**
@@ -382,17 +383,17 @@ export default {
                 // For each section, make sure we calculate the size
                 // based on how many are rendered, which maxes out at
                 // the limit but can be less than the limit.
-                if (!section) return acc
-                const { limit, data } = section
-                return acc + (data.length >= limit ? limit : data.length)
-            }, 0)
+                if (!section) return acc;
+                const { limit, data } = section;
+                return acc + (data.length >= limit ? limit : data.length);
+            }, 0);
         },
 
         _componentAttrClassAutosuggestResultsContainer () {
-            return this.componentAttrClassAutosuggestResultsContainer || `${this.componentAttrPrefix}-results-container`
+            return this.componentAttrClassAutosuggestResultsContainer || `${this.componentAttrPrefix}-results-container`;
         },
         _componentAttrClassAutosuggestResults () {
-            return this.componentAttrClassAutosuggestResults || `${this.componentAttrPrefix}-results`
+            return this.componentAttrClassAutosuggestResults || `${this.componentAttrPrefix}-results`;
         },
     },
 
