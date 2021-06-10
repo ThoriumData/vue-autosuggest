@@ -1,3 +1,8 @@
+//
+// AutoSuggest SOURCE
+// Defaultsection
+//
+
 const DefaultSection = {
     name: "default-section",
     props: {
@@ -26,7 +31,7 @@ const DefaultSection = {
         componentAttrIdAutosuggest: {
             type: String,
             required: true,
-        }
+        },
     },
     data: function () {
         return {
